@@ -1,0 +1,40 @@
+data_source:
+  local_path: data/data.csv
+  s3_path: s3://example1917/IMDB_Dataset.csv
+
+base:
+  random_state: 43
+  target_col: target
+
+split:
+  dir: data/processed
+  total_file: total_data.csv
+  train_file: train_data.csv
+  test_file: test_data.csv
+  val_file: val_data.csv
+  split_ratio: 0.8
+  trim_step: 5
+
+metadata:
+  dir: data/metadata
+  metadata_file: metadata.txt
+
+process:
+  dir: data/processed
+  train_file: final_train.csv
+  test_file: final_test.csv
+
+train:
+  dir: data/processed
+  total_file: total_data.csv
+  train_file: train_data.csv
+  test_file: test_data.csv
+  val_file: val_data.csv
+  model_type: LinearRegression
+  model_dir: models
+  model_file: model.joblib
+  vectorizer_file: vectorizer.joblib
+
+cleaned:
+  dir: data/cleaned
+  data_file: clean.csv
