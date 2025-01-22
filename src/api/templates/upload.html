@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h2 class="mb-4">Upload Text or Audio File (.mp3) for Sentiment Analysis</h2>
+        </div>
+    </div>
+
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST" enctype="multipart/form-data" onsubmit="return validateFileForm()" class="mb-4">
+                <div class="form-group">
+                    <label for="fileInput" class="form-label">Choose an audio file (MP3)</label>
+                    <input type="file" name="file" id="fileInput" class="form-control">
+                </div>
+                <div class="form-group text-center">
+                    <input type="submit" value="Upload" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST" enctype="multipart/form-data" onsubmit="return validateTextForm()">
+                <div class="form-group">
+                    <label for="textInput" class="form-label">Enter your text here</label>
+                    <input type="text" name="text" id="textInput" placeholder="Enter your text here" class="form-control">
+                </div>
+                <div class="form-group text-center">
+                    <input type="submit" value="Upload" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="errorMessage" class="text-center mt-3" style="display: none; color: red;"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+   function validateTextForm() {
+       var textInput = document.getElementById('textInput').value.trim();
+
+       if (textInput.length === 0) {
+           var errorMessage = document.getElementById('errorMessage');
+           errorMessage.textContent = "Please enter text.";
+           errorMessage.style.display = "block";
+           return false;  // Prevent form submission
+       }
+
+       // Hide error message if validation passes
+       document.getElementById('errorMessage').style.display = "none";
+       return true;  // Allow form submission
+   }
+
+   function validateFileForm() {
+       var fileInput = document.getElementById('fileInput');
+       var allowedExtensions = /(\.mp3)$/i; // Regular expression to match .mp3 extension
+
+       if (fileInput.files.length === 0) {
+           alert("Please choose a file.");
+           return false;  // Prevent form submission if no file chosen
+       }
+
+       // Get the selected file
+       var selectedFile = fileInput.files[0];
+
+       // Check file size
+       var fileSizeMB = selectedFile.size / (1024 * 1024); // Calculate file size in MB
+       if (fileSizeMB > 30) {
+           alert("File size exceeds the limit of 30 MB.");
+           return false; // Prevent form submission if file size exceeds 30 MB
+       }
+
+       // Check the file extension against the allowed extensions
+       if (!allowedExtensions.test(selectedFile.name)) {
+           alert("Please select an MP3 file.");
+           return false; // Prevent form submission if file extension is not .mp3
+       }
+
+       // File is chosen, within size limit, and has a .mp3 extension
+       return true; // Allow form submission
+   }
+</script>
+{% endblock %}
